@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}チェックイン{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title mb-4">チェックイン</h2>
+        <form method="POST">
+            <div class="form-group mb-3">
+                <label for="code">チェックインコードを入力</label>
+                <input type="text" id="code" name="code" required 
+                       class="form-control" placeholder="コードを入力してください">
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-check"></i> チェックイン
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

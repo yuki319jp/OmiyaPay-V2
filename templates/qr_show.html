@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>QRコード決済</h2>
+    
+    <!-- QRコード表示エリア -->
+    <div id="qrContainer" class="text-center">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="mb-3">支払い受け取り用QRコード</h3>
+                <img id="qrCode" src="" alt="Payment QR Code">
+            </div>
+        </div>
+    </div>
+
+    <!-- 承認ダイアログ -->
+    <div id="approvalDialog" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">支払い承認</h5>
+                </div>
+                <div class="modal-body">
+                    <p>支払い要求が来ました</p>
+                    <p>金額: <span id="requestedAmount">0</span>円</p>
+                    <p>支払い元: <span id="payerName"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button id="approveBtn" class="btn btn-primary">承認</button>
+                    <button id="rejectBtn" class="btn btn-danger">拒否</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let socket;
+
+function setupWebSocket() {
+    const userId = '{{ user_id }}';
+    socket = new WebSocket(`ws://${window.location.host}/ws/payment/${userId}`);
+    
+    socket.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        if (data.type === 'payment_request') {
+            showApprovalDialog(data);
+        }
+    };
+}
+
+function showApprovalDialog(data) {
+    document.getElementById('requestedAmount').textContent = data.amount;
+    document.getElementById('payerName').textContent = data.payer_name;
+    document.getElementById('approvalDialog').style.display = 'block';
+    
+    document.getElementById('approveBtn').onclick = () => respondToPayment(data.request_id, true);
+    document.getElementById('rejectBtn').onclick = () => respondToPayment(data.request_id, false);
+}
+
+function respondToPayment(requestId, approved) {
+    fetch('/pay/respond', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ request_id: requestId, approved: approved })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(approved ? '支払いを承認しました' : '支払いを拒否しました');
+        } else {
+            alert('エラーが発生しました');
+        }
+        document.getElementById('approvalDialog').style.display = 'none';
+    });
+}
+
+// QRコードの生成
+fetch('/pay/generate-qr')
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('qrCode').src = `data:image/png;base64,${data}`;
+    });
+
+setupWebSocket();
+</script>
+{% endblock %}

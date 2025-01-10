@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OmiyaPay</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="{{ url_for('dashboard') }}" class="nav-item {% if request.endpoint == 'dashboard' %}active{% endif %}">
+            <i class="fas fa-user"></i>
+            <span>アカウント</span>
+        </a>
+        <a href="{{ url_for('balance') }}" class="nav-item {% if request.endpoint == 'balance' %}active{% endif %}">
+            <i class="fas fa-wallet"></i>
+            <span>残高</span>
+        </a>
+        <a href="{{ url_for('pay_menu') }}" class="nav-item pay-button">
+            <i class="fas fa-qrcode"></i>
+        </a>
+        <a href="{{ url_for('leaderboard') }}" class="nav-item {% if request.endpoint == 'leaderboard' %}active{% endif %}">
+            <i class="fas fa-trophy"></i>
+            <span>ランキング</span>
+        </a>
+        <a href="{{ url_for('checkin') }}" class="nav-item {% if request.endpoint == 'checkin' %}active{% endif %}">
+            <i class="fas fa-calendar-check"></i>
+            <span>チェックイン</span>
+        </a>
+    </nav>
+</body>
+</html>

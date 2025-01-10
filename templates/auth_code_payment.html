@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>認証コードで支払い</h2>
+    <form method="POST" action="{{ url_for('payment.auth_code_payment') }}">
+        <div class="form-group">
+            <label for="code">認証コード</label>
+            <input type="text" class="form-control" id="code" name="code" required pattern="\d{6}" maxlength="6">
+        </div>
+        <button type="submit" class="btn btn-primary">支払う</button>
+    </form>
+</div>
+{% endblock %}

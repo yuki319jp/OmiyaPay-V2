@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">サービス管理</h2>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>サービス名</th>
+                    <th>状態</th>
+                    <th>最終更新</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for service in services %}
+                <tr>
+                    <td>{{ service.name }}</td>
+                    <td>
+                        <select class="form-select status-select" data-service-id="{{ service.id }}">
+                            <option value="operational" {% if service.status == 'operational' %}selected{% endif %}>正常</option>

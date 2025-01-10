@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>認証コード</h2>
+    <div class="card">
+        <div class="card-body text-center">
+            <h3>金額: {{ amount }}円</h3>
+            <h1 class="display-4">{{ code }}</h1>
+            <p class="text-muted">この認証コードは10分間有効です</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

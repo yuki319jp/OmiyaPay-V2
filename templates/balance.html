@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}残高確認{% endblock %}
+
+{% block content %}
+<div class="card text-center">
+    <div class="card-body">
+        <h2 class="card-title mb-4">残高確認</h2>
+        <div class="display-1 mb-4">¥{{ user.balance }}</div>
+        <div class="text-muted">
+            <i class="fas fa-sync-alt"></i>
+            <span>最終更新: {{ user.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

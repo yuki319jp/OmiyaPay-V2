@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ランキング{% endblock %}</title>
+</head>
+<body>
+    {% extends "layout.html" %}
+
+    {% block content %}
+    <div class="leaderboard-container">
+        <div class="list-group">
+            {% for user in users %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <span class="badge bg-primary rounded-pill me-3">{{ loop.index }}</span>
+                    <span class="user-name">{{ user.name }}</span>
+                </div>
+                <span class="badge bg-secondary">{{ user.points }} pt</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

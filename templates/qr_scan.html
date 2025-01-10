@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRコードスキャン</title>
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+</head>
+<body>
+    {% extends "layout.html" %}
+
+    {% block content %}
+    <div class="container">
+        <h2>QRコードをスキャン</h2>
+        <video id="preview"></video>
+
+        <!-- 金額入力フォーム -->
+        <div id="paymentForm" style="display: none;" class="mt-4">
+            <form id="amountForm">
+                <div class="form-group">
+                    <label for="amount">支払い金額（円）</label>
+                    <input type="number" class="form-control" id="amount" required min="1">
+                </div>
+                <button type="submit" class="btn btn-primary">支払いリクエスト送信</button>
+            </form>
+        </div>
+
+        <!-- 処理中表示 -->
+        <div id="processingDisplay" style="display: none;" class="mt-4">
+            <div class="alert alert-info">
+                承認待ち...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let receiverId = null;
+        let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+
+        scanner.addListener('scan', function (content) {
+            try {
+                const paymentData = JSON.parse(content);
+                if (paymentData.type === 'payment' && paymentData.receiver_id) {
+                    receiverId = paymentData.receiver_id;
+                    scanner.stop();
+                    document.getElementById('preview').style.display = 'none';
+                    document.getElementById('paymentForm').style.display = 'block';
+                } else {
+                    alert('無効なQRコードです');
+                }
+            } catch (e) {
+                alert('QRコードの読み取りに失敗しました');
+            }
+        });
+
+        document.getElementById('amountForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const amount = document.getElementById('amount').value;
+            
+            document.getElementById('paymentForm').style.display = 'none';
+            document.getElementById('processingDisplay').style.display = 'block';
+
+            // 支払いリクエスト送信
+            fetch('/pay/request', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    receiver_id: receiverId,
+                    amount: amount
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('支払いが完了しました');
+                    window.location.href = '/dashboard';
+                } else {
+                    alert('支払いが拒否されました: ' + data.error);
+                    window.location.href = '/pay-menu';
+                }
+            });
+        });
+
+        Instascan.Camera.getCameras().then(function (cameras) {
+            if (cameras.length > 0) {
+                scanner.start(cameras[0]);
+            } else {
+                console.error('カメラが見つかりません');
+            }
+        });
+    </script>
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,94 @@
+/* 全体のスタイル */
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+}
+
+/* ナビゲーションバーのスタイル */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+/* カードのスタイル */
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* フォームのスタイル */
+.form-control {
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    padding: 0.75rem;
+}
+
+.form-control:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+}
+
+/* ボタンのスタイル */
+.btn {
+    border-radius: 10px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #4a90e2, #5ca0f2);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, #357abd, #4a90e2);
+    transform: translateY(-1px);
+}
+
+/* QRコードコンテナのスタイル */
+#qrContainer {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,.1);
+    max-width: 400px;
+    margin: 2rem auto;
+}
+
+/* 残高表示のスタイル */
+.balance-display {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #4a90e2;
+    text-shadow: 1px 1px 2px rgba(0,0,0,.1);
+}
+
+/* アラートのスタイル */
+.alert {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,.05);
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+}
